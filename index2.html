@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1767bb">
+  <meta name="description" content="Application de démonstration pour la gestion des médicaments, des matières premières, des stocks et des lots de production d'un laboratoire pharmaceutique.">
+  <title>LaboPharma — Gestion de production</title>
+  <link rel="stylesheet" href="style2.css">
+  <script src="script2.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-content">
+      <a class="brand" href="#accueil" aria-label="LaboPharma, accueil">
+        <span class="brand-mark" aria-hidden="true">LP</span>
+        <span><strong>LaboPharma</strong><small>Gestion de production</small></span>
+      </a>
+      <span class="demo-badge"><span></span> Application de démonstration</span>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    <aside class="sidebar" aria-label="Navigation de l'application">
+      <p class="nav-label">ESPACE LABORATOIRE</p>
+      <nav class="main-nav">
+        <button class="nav-link is-active" type="button" data-view="dashboard" aria-current="page"><span aria-hidden="true">⌂</span> Tableau de bord</button>
+        <button class="nav-link" type="button" data-view="medicaments"><span aria-hidden="true">✚</span> Médicaments</button>
+        <button class="nav-link" type="button" data-view="matieres"><span aria-hidden="true">◈</span> Matières premières</button>
+        <button class="nav-link" type="button" data-view="production"><span aria-hidden="true">▤</span> Lots de production</button>
+        <button class="nav-link" type="button" data-view="stocks"><span aria-hidden="true">▦</span> Stocks & historique</button>
+      </nav>
+      <div class="sidebar-note">
+        <span class="note-icon" aria-hidden="true">i</span>
+        <p>Les données sont enregistrées dans le stockage local de ce navigateur.</p>
+      </div>
+      <a class="portfolio-link" href="../index.html">← Retour au portfolio</a>
+    </aside>
+
+    <main class="main-content" id="contenu">
+      <section class="view is-visible" id="view-dashboard" aria-labelledby="page-title">
+        <div class="page-heading">
+          <div><p class="eyebrow">VUE D'ENSEMBLE</p><h1 id="page-title">Tableau de bord</h1><p class="heading-copy">Suivez votre activité de production en un coup d'œil.</p></div>
+          <span class="today-label" id="today-label"></span>
+        </div>
+        <div class="stat-grid">
+          <article class="stat-card"><span class="stat-icon blue" aria-hidden="true">✚</span><div><p>Médicaments</p><strong id="stat-medicaments">0</strong><small>références enregistrées</small></div></article>
+          <article class="stat-card"><span class="stat-icon violet" aria-hidden="true">◈</span><div><p>Matières premières</p><strong id="stat-matieres">0</strong><small>références enregistrées</small></div></article>
+          <article class="stat-card"><span class="stat-icon orange" aria-hidden="true">▤</span><div><p>Lots lancés</p><strong id="stat-lots">0</strong><small>tous statuts confondus</small></div></article>
+          <article class="stat-card"><span class="stat-icon green" aria-hidden="true">▦</span><div><p>Unités produites</p><strong id="stat-unites">0</strong><small>production cumulée</small></div></article>
+        </div>
+        <div class="dashboard-grid">
+          <section class="panel">
+            <div class="panel-heading"><div><h2>Derniers lots</h2><p>Activité récente de production</p></div><button class="text-button" type="button" data-go="production">Voir les lots →</button></div>
+            <div class="table-wrap"><table><thead><tr><th>Lot</th><th>Médicament</th><th>Date</th><th>Quantité</th><th>Statut</th></tr></thead><tbody id="recent-lots"></tbody></table></div>
+          </section>
+          <section class="panel alert-panel">
+            <div class="panel-heading"><div><h2>Stocks à surveiller</h2><p>Matières premières sous le seuil de 10 kg</p></div></div>
+            <div id="low-stock-list" class="low-stock-list"></div>
+          </section>
+        </div>
+        <section class="panel quick-panel">
+          <div class="panel-heading"><div><h2>Accès rapide</h2><p>Les actions principales du laboratoire</p></div></div>
+          <div class="quick-actions">
+            <button class="quick-action" type="button" data-go="medicaments"><span class="quick-icon">＋</span><span><b>Ajouter un médicament</b><small>Créer une référence et sa composition</small></span><span class="quick-arrow">→</span></button>
+            <button class="quick-action" type="button" data-go="matieres"><span class="quick-icon violet">＋</span><span><b>Ajouter une matière première</b><small>Enregistrer une matière et son stock</small></span><span class="quick-arrow">→</span></button>
+            <button class="quick-action" type="button" data-go="production"><span class="quick-icon orange">＋</span><span><b>Lancer un lot</b><small>Planifier une nouvelle production</small></span><span class="quick-arrow">→</span></button>
+          </div>
+        </section>
+        <p class="app-disclaimer">Données de démonstration — cette application pédagogique n'est pas un outil certifié pour un usage pharmaceutique réel.</p>
+      </section>
+
+      <section class="view" id="view-medicaments" aria-labelledby="medicaments-title" hidden>
+        <div class="page-heading"><div><p class="eyebrow">CATALOGUE PRODUITS</p><h1 id="medicaments-title">Gestion des médicaments</h1><p class="heading-copy">Gérez les fiches produit et les compositions de fabrication.</p></div><button class="primary-button" type="button" data-form="medicament-form">＋ Nouveau médicament</button></div>
+        <section class="panel form-panel" id="medicament-form-panel" hidden>
+          <div class="panel-heading"><div><h2 id="medicament-form-title">Ajouter un médicament</h2><p>Les dosages sont exprimés en grammes par unité produite.</p></div><button class="icon-button" type="button" data-cancel="medicament-form" aria-label="Fermer le formulaire">×</button></div>
+          <form id="medicament-form">
+            <input type="hidden" name="editingId">
+            <div class="form-grid">
+              <label>Code de référence<input name="code" required maxlength="20" placeholder="Ex. MED007"></label>
+              <label>Désignation<input name="name" required maxlength="80" placeholder="Ex. Paracétamol 500 mg"></label>
+              <label>Forme galénique<select name="form" required><option value="">Choisir une forme</option><option>Comprimé</option><option>Gélule</option><option>Sirop</option><option>Liquide</option><option>Pommade</option><option>Gel</option><option>Poudre</option><option>Injectable</option><option>Autre</option></select></label>
+              <label>Prix public (MAD)<input name="ppm" type="number" min="0" step="0.01" required placeholder="0,00"></label>
+              <label class="full-field">Descriptif thérapeutique<textarea name="description" rows="2" maxlength="240" placeholder="Description du médicament"></textarea></label>
+            </div>
+            <div class="recipe-heading"><div><h3>Composition du médicament</h3><p>Ajoutez les matières premières, le dosage unitaire et le taux de perte.</p></div><button class="secondary-button" type="button" id="add-ingredient">＋ Ajouter une matière</button></div>
+            <div id="recipe-rows" class="recipe-rows"></div>
+            <div class="form-actions"><button class="secondary-button" type="button" data-cancel="medicament-form">Annuler</button><button class="primary-button" type="submit">Enregistrer le médicament</button></div>
+          </form>
+        </section>
+        <section class="panel">
+          <div class="panel-heading list-heading"><div><h2>Liste des médicaments</h2><p id="medicament-count">0 référence</p></div><label class="search-box"><span aria-hidden="true">⌕</span><input id="medicament-search" type="search" placeholder="Rechercher..." aria-label="Rechercher un médicament"></label></div>
+          <div class="table-wrap"><table><thead><tr><th>Référence</th><th>Désignation</th><th>Forme</th><th>PPM (MAD)</th><th>Composition</th><th>Actions</th></tr></thead><tbody id="medicament-rows"></tbody></table></div>
+        </section>
+      </section>
+
+      <section class="view" id="view-matieres" aria-labelledby="matieres-title" hidden>
+        <div class="page-heading"><div><p class="eyebrow">APPROVISIONNEMENT</p><h1 id="matieres-title">Matières premières</h1><p class="heading-copy">Suivez les matières premières disponibles et leur provenance.</p></div><button class="primary-button" type="button" data-form="matiere-form">＋ Nouvelle matière</button></div>
+        <section class="panel form-panel" id="matiere-form-panel" hidden>
+          <div class="panel-heading"><div><h2 id="matiere-form-title">Ajouter une matière première</h2><p>Les quantités sont suivies en kilogrammes (kg).</p></div><button class="icon-button" type="button" data-cancel="matiere-form" aria-label="Fermer le formulaire">×</button></div>
+          <form id="matiere-form">
+            <input type="hidden" name="editingId">
+            <div class="form-grid">
+              <label>Code de référence<input name="code" required maxlength="20" placeholder="Ex. MP011"></label>
+              <label>Intitulé<input name="name" required maxlength="80" placeholder="Nom de la matière première"></label>
+              <label>Provenance<select name="origin" required><option value="Locale">Locale</option><option value="Importée">Importée</option></select></label>
+              <label>Stock disponible (kg)<input name="stock" type="number" min="0" step="0.001" required placeholder="0"></label>
+            </div>
+            <div class="form-actions"><button class="secondary-button" type="button" data-cancel="matiere-form">Annuler</button><button class="primary-button" type="submit">Enregistrer la matière</button></div>
+          </form>
+        </section>
+        <section class="panel">
+          <div class="panel-heading list-heading"><div><h2>Inventaire des matières</h2><p id="matiere-count">0 références</p></div><label class="search-box"><span aria-hidden="true">⌕</span><input id="matiere-search" type="search" placeholder="Rechercher..." aria-label="Rechercher une matière première"></label></div>
+          <div class="table-wrap"><table><thead><tr><th>Référence</th><th>Intitulé</th><th>Provenance</th><th>Stock disponible</th><th>Actions</th></tr></thead><tbody id="matiere-rows"></tbody></table></div>
+        </section>
+      </section>
+
+      <section class="view" id="view-production" aria-labelledby="production-title" hidden>
+        <div class="page-heading"><div><p class="eyebrow">FABRICATION</p><h1 id="production-title">Lots de production</h1><p class="heading-copy">Lancez un lot et déduisez automatiquement les matières du stock.</p></div></div>
+        <section class="panel form-panel">
+          <div class="panel-heading"><div><h2>Lancer un nouveau lot</h2><p>La composition et les pertes déterminent les quantités consommées.</p></div></div>
+          <form id="production-form">
+            <div class="form-grid">
+              <label>Médicament à produire<select name="medicationId" id="production-medication" required></select></label>
+              <label>Date de lancement<input name="date" type="date" required></label>
+              <label>Quantité à produire (unités)<input name="quantity" type="number" min="1" step="1" required placeholder="Ex. 500"></label>
+            </div>
+            <div id="production-preview" class="production-preview" aria-live="polite"></div>
+            <div class="form-actions"><span class="form-hint">Le lancement consomme les matières premières immédiatement.</span><button class="primary-button" type="submit">Lancer le lot</button></div>
+          </form>
+        </section>
+        <section class="panel">
+          <div class="panel-heading list-heading"><div><h2>Historique des lots</h2><p id="lot-count">0 lots</p></div><label class="search-box"><span aria-hidden="true">⌕</span><input id="lot-search" type="search" placeholder="Rechercher..." aria-label="Rechercher un lot"></label></div>
+          <div class="table-wrap"><table><thead><tr><th>N° du lot</th><th>Médicament</th><th>Date</th><th>Quantité</th><th>Statut</th><th>Actions</th></tr></thead><tbody id="lot-rows"></tbody></table></div>
+        </section>
+      </section>
+
+      <section class="view" id="view-stocks" aria-labelledby="stocks-title" hidden>
+        <div class="page-heading"><div><p class="eyebrow">SUIVI DES QUANTITÉS</p><h1 id="stocks-title">Stocks & historique</h1><p class="heading-copy">Consultez les stocks disponibles et les mouvements enregistrés.</p></div><button class="secondary-button" type="button" id="export-history">Exporter l'historique CSV</button></div>
+        <section class="panel">
+          <div class="panel-heading list-heading"><div><h2>Stock des matières premières</h2><p>Les seuils d'alerte sont fixés à 10 kg.</p></div></div>
+          <div class="table-wrap"><table><thead><tr><th>Référence</th><th>Matière première</th><th>Stock disponible</th><th>Niveau</th></tr></thead><tbody id="stock-material-rows"></tbody></table></div>
+        </section>
+        <section class="panel">
+          <div class="panel-heading list-heading"><div><h2>Stock des médicaments</h2><p>Quantité cumulée issue des lots lancés.</p></div></div>
+          <div class="table-wrap"><table><thead><tr><th>Référence</th><th>Médicament</th><th>Unités en stock</th><th>Forme</th></tr></thead><tbody id="stock-medication-rows"></tbody></table></div>
+        </section>
+        <section class="panel">
+          <div class="panel-heading list-heading"><div><h2>Historique des mouvements</h2><p id="movement-count">0 mouvements</p></div></div>
+          <div class="table-wrap"><table><thead><tr><th>Date</th><th>Type</th><th>Référence</th><th>Détail</th><th>Variation</th></tr></thead><tbody id="movement-rows"></tbody></table></div>
+        </section>
+      </section>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      <footer class="main-footer"><span>LaboPharma <span aria-hidden="true">·</span> Projet pédagogique OFPPT</span><span>HTML5 · CSS3 · JavaScript</span></footer>
+    </main>
+  </div>
+</body>
+</html>
